@@ -14,11 +14,11 @@ class LoginPage(Protocol):
 
 
 def log_in(page: LoginPage, username: str, secret: str, attempts: int = 3) -> bool:
-    password = page.password
+    password_input = page.password
     for _ in range(attempts):
         page.username.fill(username)
-        password.fill(secret)
+        password_input.fill(secret)
         if page.submit():
             return True
-        password.clear()
+        password_input.clear()
     return False
