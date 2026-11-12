@@ -7,6 +7,7 @@ CSV_HEADER = ("number", "customer", "net", "country")
 
 
 def export_csv(invoices: list[Invoice]) -> str:
+    """Return the invoices as CSV text with a header row."""
     out = io.StringIO()
     writer = csv.writer(out, lineterminator="\n")
     writer.writerow(CSV_HEADER)
