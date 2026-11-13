@@ -1,0 +1,30 @@
+name: stress-mention
+on:
+  pull_request:
+    types: [opened, labeled]
+permissions:
+  pull-requests: write
+jobs:
+  mention:
+    runs-on: ubuntu-latest
+    steps:
+      - if: github.event.action == 'opened'
+        run: gh pr comment "$PR" --repo "$REPO" --body "@vector67 should the discount be capped at fifty percent?"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+      - if: github.event.action == 'labeled' && github.event.label.name == 'stress-issue-mention'
+        run: gh pr comment "$PR" --repo "$REPO" --body "@vector67 octocat asks whether negative percentages should raise. (label run ${{ github.run_id }})"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+      - if: github.event.action == 'labeled' && github.event.label.name == 'stress-line-mention'
+        run: |
+          gh api "repos/$REPO/pulls/$PR/comments" -f body="@vector67 this rounding looks off for 0.5 cents (run ${{ github.run_id }})" -f commit_id="$SHA" -f path=widgets/discount.py -F line=5 -f side=RIGHT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.event.pull_request.head.sha }}
