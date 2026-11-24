@@ -6,3 +6,7 @@ def widget_count(widgets):
 
 def has_widgets(widgets):
     return widget_count(widgets) > 0
+
+
+def no_widgets(widgets):
+    return not has_widgets(widgets)
